@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl *)",
+      "Bash(start \"\" \"C:\\\\tmp\\\\Form-output-test.xlsx\")",
+      "Bash(explorer \"C:\\\\tmp\\\\Form-output-test.xlsx\")"
+    ]
+  }
+}

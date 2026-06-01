@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip install *)",
+      "Bash(python -c ' *)",
+      "Bash(python app.py)",
+      "Bash(curl -s http://localhost:5000/)",
+      "Bash(curl -s -X POST http://localhost:5000/convert -F file=@Forms/Data-input.xlsx -F 'factory_name=TUAN DAT 1' -o /tmp/test-output.xlsx -w '%{http_code} size:%{size_download}')",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5000/zanex/js/jquery.min.js)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5000/favicon.ico)",
+      "Bash(curl -s -X POST http://localhost:5000/convert -F 'file=@e:/Projects/TD App/Forms/Data-input.xlsx' -F 'factory_name=TUAN DAT 1' -o /tmp/output-final.xlsx -w 'HTTP %{http_code}, size: %{size_download} bytes')"
+    ]
+  }
+}

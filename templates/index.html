@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>TD App – Excel Form Converter</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#1a73e8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="TD App" />
+    <link rel="apple-touch-icon" href="/static/icons/icon-192.png" />
+
+    <!-- BOOTSTRAP CSS -->
+    <link href="/zanex/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- STYLE CSS -->
+    <link href="/zanex/css/style.css" rel="stylesheet" />
+    <link href="/zanex/css/dark-style.css" rel="stylesheet" />
+    <link href="/zanex/css/skin-modes.css" rel="stylesheet" />
+    <link href="/zanex/css/transparent-style.css" rel="stylesheet" />
+    <!-- FONT-ICONS CSS -->
+    <link href="/zanex/css/icons.css" rel="stylesheet" />
+    <!-- COLOR SKIN CSS -->
+    <link id="theme" rel="stylesheet" type="text/css" media="all" href="/zanex/colors/color1.css" />
+
+    <style>
+        .upload-zone {
+            border: 2px dashed #4b9fdf;
+            border-radius: 10px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+            background: #f8fbff;
+        }
+        .upload-zone.dragover { background: #dceefb; border-color: #1a7bc4; }
+        .upload-zone .upload-icon { font-size: 2.8rem; line-height: 1; }
+        #file-name { font-size: 0.875rem; color: #666; margin-top: 8px; min-height: 20px; }
+
+        /* Fix sidebar active items invisible in light mode (white text on white bg from theme) */
+        html body.light-mode .app-sidebar .side-menu__item.active .side-menu__label,
+        html body.light-mode .app-sidebar .side-menu__item.active .side-menu__icon,
+        html body.light-mode .app-sidebar .slide.active > a.side-menu__item .side-menu__label,
+        html body.light-mode .app-sidebar .slide.active > a.side-menu__item .side-menu__icon {
+            color: #1a73e8 !important;
+        }
+        html body.light-mode .app-sidebar .side-menu__item.active,
+        html body.light-mode .app-sidebar .slide.active > a.side-menu__item {
+            background: transparent !important;
+            background-image: none !important;
+        }
+    </style>
+</head>
+
+<body class="app sidebar-mini ltr light-mode">
+
+<!-- GLOBAL-LOADER -->
+<div id="global-loader">
+    <img src="/zanex/images/loader.svg" class="loader-img" alt="Loader">
+</div>
+
+<div class="page">
+    <div class="page-main">
+
+        <!-- ── APP HEADER ── -->
+        <div class="app-header header sticky">
+            <div class="container-fluid main-container">
+                <div class="d-flex align-items-center">
+                    <a aria-label="Hide Sidebar" class="app-sidebar__toggle" data-bs-toggle="sidebar" href="javascript:void(0);"></a>
+                    <div class="responsive-logo">
+                        <a href="/" class="header-logo">
+                            <img src="/zanex/images/brand/logo-3.png" class="mobile-logo logo-1" alt="logo">
+                            <img src="/zanex/images/brand/logo.png"   class="mobile-logo dark-logo-1" alt="logo">
+                        </a>
+                    </div>
+                    <a class="logo-horizontal" href="/">
+                        <img src="/zanex/images/brand/logo.png"   class="header-brand-img desktop-logo" alt="logo">
+                        <img src="/zanex/images/brand/logo-3.png" class="header-brand-img light-logo1"  alt="logo">
+                    </a>
+                    <div class="main-header-center ms-3 d-none d-lg-block">
+                        <input class="form-control" placeholder="Search for anything..." type="search">
+                        <button class="btn"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    </div>
+                    <div class="d-flex order-lg-2 ms-auto header-right-icons">
+                        <button class="navbar-toggler navresponsive-toggler d-lg-none ms-auto" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent-4"
+                            aria-controls="navbarSupportedContent-4" aria-expanded="false">
+                            <span class="navbar-toggler-icon fe fe-more-vertical text-dark"></span>
+                        </button>
+                        <div class="navbar navbar-collapse responsive-navbar p-0">
+                            <div class="collapse navbar-collapse" id="navbarSupportedContent-4">
+                                <div class="d-flex order-lg-2">
+                                    <!-- Dark mode toggle -->
+                                    <div class="dropdown d-md-flex">
+                                        <a class="nav-link icon theme-layout nav-link-bg layout-setting">
+                                            <span class="dark-layout"><i class="fe fe-moon"></i></span>
+                                            <span class="light-layout"><i class="fe fe-sun"></i></span>
+                                        </a>
+                                    </div>
+                                    <!-- Full screen -->
+                                    <div class="dropdown d-md-flex">
+                                        <a class="nav-link icon full-screen-link nav-link-bg">
+                                            <i class="fe fe-minimize fullscreen-button" id="myvideo"></i>
+                                        </a>
+                                    </div>
+                                    <!-- Notifications -->
+                                    <div class="dropdown d-md-flex notifications">
+                                        <a class="nav-link icon" data-bs-toggle="dropdown">
+                                            <i class="fe fe-bell"></i><span class="pulse"></span>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                            <div class="drop-heading border-bottom">
+                                                <h6 class="mt-1 mb-0 fs-16 fw-semibold">Notifications</h6>
+                                            </div>
+                                            <div class="p-3 text-muted text-center">No new notifications</div>
+                                        </div>
+                                    </div>
+                                    <!-- Profile -->
+                                    <div class="dropdown d-md-flex profile-1">
+                                        <a href="javascript:void(0);" data-bs-toggle="dropdown"
+                                           class="nav-link leading-none d-flex px-1">
+                                            <img src="/zanex/images/users/8.jpg" alt="profile-user"
+                                                 class="avatar profile-user brround cover-image">
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                            <div class="drop-heading">
+                                                <div class="text-center">
+                                                    <h5 class="text-dark mb-0">Administrator</h5>
+                                                    <small class="text-muted">TD App</small>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown-divider m-0"></div>
+                                            <a class="dropdown-item" href="javascript:void(0);">
+                                                <i class="dropdown-icon fe fe-user"></i> Profile
+                                            </a>
+                                            <a class="dropdown-item" href="javascript:void(0);">
+                                                <i class="dropdown-icon fe fe-settings"></i> Settings
+                                            </a>
+                                            <div class="dropdown-divider m-0"></div>
+                                            <a class="dropdown-item text-danger" href="javascript:void(0);">
+                                                <i class="dropdown-icon fe fe-alert-circle"></i> Sign out
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <!-- Side settings -->
+                                    <div class="dropdown d-md-flex header-settings">
+                                        <a href="javascript:void(0);" class="nav-link icon"
+                                           data-bs-toggle="sidebar-right" data-target=".sidebar-right">
+                                            <i class="fe fe-menu"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /APP HEADER -->
+
+        <!-- ── APP SIDEBAR ── -->
+        <div class="sticky">
+            <div class="app-sidebar__overlay" data-bs-toggle="sidebar"></div>
+            <aside class="app-sidebar">
+                <div class="side-header">
+                    <a class="header-brand1" href="/">
+                        <img src="/zanex/images/brand/logo.png"   class="header-brand-img desktop-logo" alt="logo">
+                        <img src="/zanex/images/brand/logo-1.png" class="header-brand-img toggle-logo"  alt="logo">
+                        <img src="/zanex/images/brand/logo-2.png" class="header-brand-img light-logo"   alt="logo">
+                        <img src="/zanex/images/brand/logo-3.png" class="header-brand-img light-logo1"  alt="logo">
+                    </a>
+                </div>
+                <div class="main-sidemenu">
+                    <div class="slide-left disabled" id="slide-left">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
+                            <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"/>
+                        </svg>
+                    </div>
+                    <ul class="side-menu">
+                        <li class="sub-category"><h3>Main</h3></li>
+                        <li class="slide active">
+                            <a class="side-menu__item active" href="/">
+                                <i class="side-menu__icon fe fe-home"></i>
+                                <span class="side-menu__label">Dashboard</span>
+                            </a>
+                        </li>
+
+                        <li class="sub-category"><h3>Công cụ</h3></li>
+                        <li class="slide">
+                            <a class="side-menu__item" href="/">
+                                <i class="side-menu__icon fe fe-file-text"></i>
+                                <span class="side-menu__label">Excel Converter</span>
+                            </a>
+                        </li>
+
+                        <li class="sub-category"><h3>Quản lý</h3></li>
+                        <li class="slide">
+                            <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0);">
+                                <i class="side-menu__icon fe fe-layers"></i>
+                                <span class="side-menu__label">Đơn hàng</span>
+                                <i class="angle fa fa-angle-right"></i>
+                            </a>
+                            <ul class="slide-menu">
+                                <li class="side-menu-label1"><a href="javascript:void(0)">Đơn hàng</a></li>
+                                <li><a href="javascript:void(0);" class="slide-item">Danh sách đơn hàng</a></li>
+                                <li><a href="javascript:void(0);" class="slide-item">Tạo đơn hàng mới</a></li>
+                                <li><a href="javascript:void(0);" class="slide-item">Báo cáo sản xuất</a></li>
+                            </ul>
+                        </li>
+                        <li class="slide">
+                            <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0);">
+                                <i class="side-menu__icon fe fe-users"></i>
+                                <span class="side-menu__label">Nhà máy</span>
+                                <i class="angle fa fa-angle-right"></i>
+                            </a>
+                            <ul class="slide-menu">
+                                <li class="side-menu-label1"><a href="javascript:void(0)">Nhà máy</a></li>
+                                <li><a href="javascript:void(0);" class="slide-item">Danh sách nhà máy</a></li>
+                                <li><a href="javascript:void(0);" class="slide-item">Thêm nhà máy</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="sub-category"><h3>Hệ thống</h3></li>
+                        <li class="slide">
+                            <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0);">
+                                <i class="side-menu__icon fe fe-settings"></i>
+                                <span class="side-menu__label">Cài đặt</span>
+                                <i class="angle fa fa-angle-right"></i>
+                            </a>
+                            <ul class="slide-menu">
+                                <li class="side-menu-label1"><a href="javascript:void(0)">Cài đặt</a></li>
+                                <li><a href="javascript:void(0);" class="slide-item">Tài khoản</a></li>
+                                <li><a href="javascript:void(0);" class="slide-item">Phân quyền</a></li>
+                            </ul>
+                        </li>
+                        <li class="slide">
+                            <a class="side-menu__item" href="javascript:void(0);">
+                                <i class="side-menu__icon fe fe-alert-circle"></i>
+                                <span class="side-menu__label">Đăng xuất</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="slide-right" id="slide-right">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
+                            <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"/>
+                        </svg>
+                    </div>
+                </div>
+            </aside>
+        </div>
+        <!-- /APP SIDEBAR -->
+
+        <!-- ── MAIN CONTENT ── -->
+        <div class="main-content app-content mt-0">
+            <div class="side-app">
+                <div class="main-container container-fluid">
+
+                    <!-- Page Header -->
+                    <div class="page-header">
+                        <div>
+                            <h1 class="page-title">Excel Form Converter</h1>
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Excel Converter</li>
+                            </ol>
+                        </div>
+                        <div class="ms-auto pageheader-btn">
+                            <a href="javascript:void(0);" class="btn btn-primary btn-icon text-white">
+                                <span><i class="fe fe-download-cloud"></i></span> Xuất báo cáo
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Stats row -->
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <div class="card overflow-hidden">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h6>Files đã xử lý</h6>
+                                            <h3 class="mb-2 number-font" id="stat-processed">0</h3>
+                                            <p class="text-muted mb-0"><span class="text-success"><i class="fa fa-check text-success me-1"></i>Session hiện tại</span></p>
+                                        </div>
+                                        <div class="col col-auto">
+                                            <div class="counter-icon bg-primary-gradient box-shadow-primary brround ms-auto">
+                                                <i class="fe fe-file text-white mb-5"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <div class="card overflow-hidden">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h6>Trạng thái</h6>
+                                            <h3 class="mb-2 number-font text-success" id="stat-status">Sẵn sàng</h3>
+                                            <p class="text-muted mb-0">Hệ thống hoạt động</p>
+                                        </div>
+                                        <div class="col col-auto">
+                                            <div class="counter-icon bg-success-gradient box-shadow-success brround ms-auto">
+                                                <i class="fe fe-check-circle text-white mb-5"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <div class="card overflow-hidden">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h6>Định dạng hỗ trợ</h6>
+                                            <h3 class="mb-2 number-font">.xlsx</h3>
+                                            <p class="text-muted mb-0">Excel 2007+</p>
+                                        </div>
+                                        <div class="col col-auto">
+                                            <div class="counter-icon bg-secondary-gradient box-shadow-secondary brround ms-auto">
+                                                <i class="fe fe-database text-white mb-5"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <div class="card overflow-hidden">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h6>Max file size</h6>
+                                            <h3 class="mb-2 number-font">16 MB</h3>
+                                            <p class="text-muted mb-0">Per upload</p>
+                                        </div>
+                                        <div class="col col-auto">
+                                            <div class="counter-icon bg-danger-gradient box-shadow-danger brround ms-auto">
+                                                <i class="fe fe-upload-cloud text-white mb-5"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main converter card -->
+                    <div class="row">
+                        <div class="col-lg-7 col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="fe fe-refresh-cw me-2 text-primary"></i>
+                                        Chuyển đổi Form Excel
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <form id="convert-form" enctype="multipart/form-data">
+
+                                        <!-- Factory name -->
+                                        <div class="mb-4">
+                                            <label for="factory_name" class="form-label fw-semibold">
+                                                <i class="fe fe-home me-1 text-primary"></i>
+                                                Factory Name <span class="text-danger">*</span>
+                                            </label>
+                                            <input type="text" class="form-control form-control-lg"
+                                                   id="factory_name" name="factory_name"
+                                                   placeholder="e.g. TUAN DAT 1"
+                                                   value="TUAN DAT 1" required>
+                                            <div class="form-text">Tên nhà máy sẽ được điền vào cột FACTORY trong file output.</div>
+                                        </div>
+
+                                        <!-- File upload -->
+                                        <div class="mb-4">
+                                            <label class="form-label fw-semibold">
+                                                <i class="fe fe-file-text me-1 text-primary"></i>
+                                                File Data-input.xlsx <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="upload-zone" id="upload-zone">
+                                                <div class="upload-icon">📂</div>
+                                                <p class="mt-3 mb-1 fw-semibold fs-15">Kéo thả file vào đây hoặc click để chọn</p>
+                                                <p class="text-muted small mb-2">Chỉ chấp nhận file <strong>.xlsx</strong></p>
+                                                <input type="file" id="file-input" name="file"
+                                                       accept=".xlsx" class="d-none" required>
+                                                <div id="file-name" class="text-muted">Chưa chọn file</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Submit -->
+                                        <div class="d-grid">
+                                            <button type="submit" class="btn btn-primary btn-lg" id="convert-btn">
+                                                <span id="btn-text">
+                                                    <i class="fe fe-download me-2"></i>Chuyển đổi &amp; Tải về
+                                                </span>
+                                                <span id="btn-spinner" class="d-none">
+                                                    <span class="spinner-border spinner-border-sm me-2"></span>Đang xử lý...
+                                                </span>
+                                            </button>
+                                        </div>
+
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Instructions card -->
+                        <div class="col-lg-5 col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="fe fe-info me-2 text-info"></i>Hướng dẫn sử dụng
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="task-list">
+                                        <div class="d-flex mb-4">
+                                            <div class="me-3">
+                                                <span class="badge bg-primary rounded-circle px-2 py-1">1</span>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-1">Nhập Factory Name</h6>
+                                                <p class="text-muted mb-0 fs-13">Nhập tên nhà máy sẽ được điền vào file output (mặc định: TUAN DAT 1)</p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex mb-4">
+                                            <div class="me-3">
+                                                <span class="badge bg-primary rounded-circle px-2 py-1">2</span>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-1">Chọn file Data-input.xlsx</h6>
+                                                <p class="text-muted mb-0 fs-13">Click vào vùng upload hoặc kéo thả file Excel vào đó</p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex mb-4">
+                                            <div class="me-3">
+                                                <span class="badge bg-primary rounded-circle px-2 py-1">3</span>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-1">Nhấn "Chuyển đổi & Tải về"</h6>
+                                                <p class="text-muted mb-0 fs-13">Hệ thống tự động xử lý và tải về file Form-output.xlsx</p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex">
+                                            <div class="me-3">
+                                                <span class="badge bg-success rounded-circle px-2 py-1">✓</span>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-1">File output bao gồm</h6>
+                                                <p class="text-muted mb-0 fs-13">
+                                                    • <strong>Daily Production Report</strong>: chi tiết từng size<br>
+                                                    • <strong>Summary</strong>: tổng hợp theo màu &amp; PO<br>
+                                                    • Hỗ trợ <strong>động</strong>: nhiều style, size, màu
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Recent activity -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="fe fe-clock me-2 text-warning"></i>Hoạt động gần đây
+                                    </h3>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div id="activity-list" class="list-group list-group-flush">
+                                        <div class="list-group-item text-muted text-center py-4">
+                                            <i class="fe fe-inbox fs-20 d-block mb-2"></i>
+                                            Chưa có hoạt động nào
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- /MAIN CONTENT -->
+
+    </div>
+
+    <!-- ── SIDEBAR RIGHT ── -->
+    <div class="sidebar sidebar-right sidebar-animate">
+        <div class="panel panel-primary card mb-0 shadow-none border-0">
+            <div class="tab-menu-heading border-0 d-flex p-3">
+                <div class="card-title mb-0">Cài đặt nhanh</div>
+                <div class="card-options ms-auto">
+                    <a href="javascript:void(0);" class="sidebar-icon text-end float-end me-1"
+                       data-bs-toggle="sidebar-right" data-target=".sidebar-right">
+                        <i class="fe fe-x text-white"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="panel-body tabs-menu-body latest-tasks p-0 border-0">
+                <div class="tabs-menu border-bottom">
+                    <ul class="nav panel-tabs">
+                        <li><a href="#side1" class="active" data-bs-toggle="tab">Profile</a></li>
+                        <li><a href="#side3" data-bs-toggle="tab">Settings</a></li>
+                    </ul>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="side1">
+                        <div class="card-body text-center">
+                            <img alt="user" class="avatar avatar-xl brround mx-auto"
+                                 src="/zanex/images/faces/6.jpg">
+                            <div class="user-info mt-3">
+                                <h6 class="fw-semibold mb-0">Administrator</h6>
+                                <span class="text-muted fs-12">TD App System</span>
+                            </div>
+                        </div>
+                        <a class="dropdown-item d-flex border-bottom border-top" href="javascript:void(0);">
+                            <i class="fe fe-user me-3 tx-20 text-muted"></i>
+                            <div class="pt-1"><h6 class="mb-0">My Profile</h6></div>
+                        </a>
+                        <a class="dropdown-item d-flex border-bottom" href="javascript:void(0);">
+                            <i class="fe fe-settings me-3 tx-20 text-muted"></i>
+                            <div class="pt-1"><h6 class="mb-0">Account Settings</h6></div>
+                        </a>
+                        <a class="dropdown-item d-flex border-bottom" href="javascript:void(0);">
+                            <i class="fe fe-power me-3 tx-20 text-muted"></i>
+                            <div class="pt-1"><h6 class="mb-0">Sign Out</h6></div>
+                        </a>
+                    </div>
+                    <div class="tab-pane" id="side3">
+                        <div class="card-body">
+                            <label class="custom-switch ps-0 mb-3">
+                                <input type="checkbox" class="custom-switch-input" checked>
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description ms-2">Dark Mode</span>
+                            </label>
+                            <label class="custom-switch ps-0 mb-3">
+                                <input type="checkbox" class="custom-switch-input" checked>
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description ms-2">Notifications</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /SIDEBAR RIGHT -->
+
+    <!-- ── FOOTER ── -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row align-items-center flex-row-reverse">
+                <div class="col-md-12 col-sm-12 text-center">
+                    Copyright &copy; <span id="year"></span>
+                    <a href="javascript:void(0);">TD App</a>.
+                    Designed with <span class="fa fa-heart text-danger"></span> by
+                    <a href="javascript:void(0);">Tuan Dat Factory</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- /FOOTER -->
+</div>
+
+<!-- BACK TO TOP -->
+<a href="#top" id="back-to-top"><i class="fa fa-angle-up"></i></a>
+
+<!-- SCRIPTS (order matters: jQuery first) -->
+<script src="/zanex/js/jquery.min.js"></script>
+<script src="/zanex/plugins/bootstrap/js/popper.min.js"></script>
+<script src="/zanex/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="/zanex/plugins/sidemenu/sidemenu.js"></script>
+<script src="/zanex/js/sticky.js"></script>
+<script src="/zanex/plugins/sidebar/sidebar.js"></script>
+<script src="/zanex/plugins/p-scroll/perfect-scrollbar.js"></script>
+<script src="/zanex/plugins/p-scroll/pscroll.js"></script>
+<script src="/zanex/js/custom.js"></script>
+<script src="/zanex/plugins/sweet-alert/sweetalert.min.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .catch(err => console.warn('SW registration failed:', err));
+    });
+}
+</script>
+
+<script>
+// Set footer year
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// Global loader hide
+$(window).on('load', function () {
+    $('#global-loader').fadeOut('slow');
+});
+
+// ── Upload zone ───────────────────────────────────────────────────────────────
+const zone      = document.getElementById('upload-zone');
+const fileInput = document.getElementById('file-input');
+const fileName  = document.getElementById('file-name');
+
+zone.addEventListener('click', () => fileInput.click());
+zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('dragover');
+    const f = e.dataTransfer.files[0];
+    if (f && f.name.endsWith('.xlsx')) {
+        const dt = new DataTransfer();
+        dt.items.add(f);
+        fileInput.files = dt.files;
+        fileName.textContent = f.name;
+    } else {
+        showError('Chỉ chấp nhận file .xlsx');
+    }
+});
+fileInput.addEventListener('change', () => {
+    fileName.textContent = fileInput.files[0]?.name || 'Chưa chọn file';
+});
+
+// ── Form submit ───────────────────────────────────────────────────────────────
+let processedCount = 0;
+
+function showError(msg) {
+    document.getElementById('stat-status').textContent = 'Lỗi';
+    document.getElementById('stat-status').className = 'mb-2 number-font text-danger';
+    swal({ title: 'Lỗi', text: msg, icon: 'error', button: 'Đóng' });
+}
+
+function showSuccess(filename) {
+    document.getElementById('stat-status').textContent = 'Hoàn thành';
+    document.getElementById('stat-status').className   = 'mb-2 number-font text-success';
+    swal({ title: 'Thành công!', text: `File ${filename} đã được tải về.`, icon: 'success', button: 'OK' });
+}
+
+function setLoading(on) {
+    document.getElementById('btn-text').classList.toggle('d-none', on);
+    document.getElementById('btn-spinner').classList.toggle('d-none', !on);
+    document.getElementById('convert-btn').disabled = on;
+    if (on) {
+        document.getElementById('stat-status').textContent = 'Đang xử lý...';
+        document.getElementById('stat-status').className = 'mb-2 number-font text-warning';
+    }
+}
+
+function addActivity(filename, success) {
+    const list = document.getElementById('activity-list');
+    const now  = new Date().toLocaleTimeString('vi-VN');
+    const icon = success ? 'fe-check-circle text-success' : 'fe-x-circle text-danger';
+    const item = `
+        <div class="list-group-item d-flex align-items-center">
+            <i class="fe ${icon} me-3 fs-18"></i>
+            <div>
+                <div class="fw-semibold fs-14">${filename}</div>
+                <small class="text-muted">${now}</small>
+            </div>
+        </div>`;
+    if (list.querySelector('.fe-inbox')) list.innerHTML = '';
+    list.insertAdjacentHTML('afterbegin', item);
+}
+
+document.getElementById('convert-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    if (!fileInput.files.length) { showError('Vui lòng chọn file .xlsx'); return; }
+
+    const origName = fileInput.files[0].name;
+    setLoading(true);
+
+    try {
+        const resp = await fetch('/convert', { method: 'POST', body: new FormData(e.target) });
+
+        if (!resp.ok) {
+            const json = await resp.json().catch(() => ({ error: resp.statusText }));
+            showError(json.error || 'Có lỗi xảy ra khi xử lý file');
+            addActivity(origName, false);
+            return;
+        }
+
+        const stem         = origName.replace(/\.xlsx$/i, '');
+        const downloadName = `${stem}-output.xlsx`;
+        const blob = await resp.blob();
+        const url  = URL.createObjectURL(blob);
+        const a    = document.createElement('a');
+        a.href = url; a.download = downloadName; a.click();
+        URL.revokeObjectURL(url);
+
+        processedCount++;
+        document.getElementById('stat-processed').textContent = processedCount;
+        showSuccess(downloadName);
+        addActivity(origName, true);
+
+    } catch (err) {
+        showError('Lỗi kết nối: ' + err.message);
+        addActivity(origName, false);
+    } finally {
+        setLoading(false);
+    }
+});
+</script>
+
+</body>
+</html>
