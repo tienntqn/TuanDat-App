@@ -1,6 +1,6 @@
 {
-  "name": "TD App – Daily Production Report",
-  "short_name": "TD App",
+  "name": "TuanDat App – Daily Production Report",
+  "short_name": "TuanDat App",
   "description": "Chuyển đổi file Excel order sheet sang Daily Production Report",
   "start_url": "/",
   "display": "standalone",

@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>TD App – Excel Form Converter</title>
+    <title>TuanDat App – Excel Form Converter</title>
 
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#1a73e8" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="TD App" />
+    <meta name="apple-mobile-web-app-title" content="TuanDat App" />
     <link rel="apple-touch-icon" href="/static/icons/icon-192.png" />
 
     <!-- BOOTSTRAP CSS -->
@@ -39,6 +39,9 @@
         .upload-zone.dragover { background: #dceefb; border-color: #1a7bc4; }
         .upload-zone .upload-icon { font-size: 2.8rem; line-height: 1; }
         #file-name { font-size: 0.875rem; color: #666; margin-top: 8px; min-height: 20px; }
+        .sidenav-toggled .brand-text { display: none; }
+        body.light-mode .brand-text { color: #1a73e8; }
+        body:not(.light-mode) .brand-text { color: #fff; }
 
         /* Fix sidebar active items invisible in light mode (white text on white bg from theme) */
         html body.light-mode .app-sidebar .side-menu__item.active .side-menu__label,
@@ -72,13 +75,13 @@
                     <a aria-label="Hide Sidebar" class="app-sidebar__toggle" data-bs-toggle="sidebar" href="javascript:void(0);"></a>
                     <div class="responsive-logo">
                         <a href="/" class="header-logo">
-                            <img src="/zanex/images/brand/logo-3.png" class="mobile-logo logo-1" alt="logo">
-                            <img src="/zanex/images/brand/logo.png"   class="mobile-logo dark-logo-1" alt="logo">
+                            <img src="/static/images/logo.png" class="mobile-logo logo-1" alt="TuanDat App" style="height:36px;">
+                            <img src="/static/images/logo.png" class="mobile-logo dark-logo-1" alt="TuanDat App" style="height:36px;">
                         </a>
                     </div>
                     <a class="logo-horizontal" href="/">
-                        <img src="/zanex/images/brand/logo.png"   class="header-brand-img desktop-logo" alt="logo">
-                        <img src="/zanex/images/brand/logo-3.png" class="header-brand-img light-logo1"  alt="logo">
+                        <img src="/static/images/logo.png" class="header-brand-img desktop-logo" alt="TuanDat App" style="height:36px;">
+                        <img src="/static/images/logo.png" class="header-brand-img light-logo1"  alt="TuanDat App" style="height:36px;">
                     </a>
                     <div class="main-header-center ms-3 d-none d-lg-block">
                         <input class="form-control" placeholder="Search for anything..." type="search">
@@ -166,11 +169,12 @@
             <div class="app-sidebar__overlay" data-bs-toggle="sidebar"></div>
             <aside class="app-sidebar">
                 <div class="side-header">
-                    <a class="header-brand1" href="/">
-                        <img src="/zanex/images/brand/logo.png"   class="header-brand-img desktop-logo" alt="logo">
-                        <img src="/zanex/images/brand/logo-1.png" class="header-brand-img toggle-logo"  alt="logo">
-                        <img src="/zanex/images/brand/logo-2.png" class="header-brand-img light-logo"   alt="logo">
-                        <img src="/zanex/images/brand/logo-3.png" class="header-brand-img light-logo1"  alt="logo">
+                    <a class="header-brand1 d-flex align-items-center gap-2" href="/">
+                        <img src="/static/images/logo.png" class="header-brand-img desktop-logo" alt="TuanDat App" style="height:40px;">
+                        <img src="/static/images/logo.png" class="header-brand-img toggle-logo"  alt="TuanDat App" style="height:32px;">
+                        <img src="/static/images/logo.png" class="header-brand-img light-logo"   alt="TuanDat App" style="height:40px;">
+                        <img src="/static/images/logo.png" class="header-brand-img light-logo1"  alt="TuanDat App" style="height:40px;">
+                        <span class="brand-text" style="font-size:1rem;font-weight:700;color:#1a73e8;white-space:nowrap;letter-spacing:.3px;">TuanDat App</span>
                     </a>
                 </div>
                 <div class="main-sidemenu">
